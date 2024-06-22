@@ -44,3 +44,10 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response[0], '200 OK')
         response_data = json.loads(response[1].decode('utf-8'))
         self.assertIn('difference_seconds', response_data)
+    def start_response_wrapper(self, environ):
+        def start_response(status, headers):
+            self.status = status
+            self.headers = headers
+
+        result = application(environ, start_response)
+        return self.status, b''.join(result)
