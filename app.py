@@ -28,3 +28,5 @@ def date_diff(first_date_str, first_tz_str, second_date_str, second_tz_str):
     second_time = second_tz.localize(second_date)
     diff = second_time - first_time
     return diff.total_seconds()
+
+def application(environ, start_response):
