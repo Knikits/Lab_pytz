@@ -51,3 +51,6 @@ class TestApp(unittest.TestCase):
 
         result = application(environ, start_response)
         return self.status, b''.join(result)
+    
+if __name__ == '__main__':
+    unittest.main()
