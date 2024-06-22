@@ -23,3 +23,9 @@ class TestApp(unittest.TestCase):
             'tz': 'EST',
             'target_tz': 'Europe/Moscow'
         }
+        self.environ['wsgi.input'] = io.BytesIO(json.dumps(data).encode('utf-8'))
+        self.environ['CONTENT_LENGTH'] = str(len(json.dumps(data)))
+        response = self.start_response_wrapper(self.environ)
+        self.assertEqual(response[0], '200 OK')
+        response_data = json.loads(response[1].decode('utf-8'))
+        self.assertIn('converted_time', response_data)
