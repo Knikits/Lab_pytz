@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "95720fb0-32c4-407b-a0d3-e5b529063597",
+		"name": "Testing lab_1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36427873",
+		"_collection_link": "https://www.postman.com/knikits/workspace/lab1/collection/36427873-95720fb0-32c4-407b-a0d3-e5b529063597?action=share&source=collection_link&creator=36427873"
+	},
+	"item": [
+		{
+			"name": "GET /<tz name>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2280/Asia/Pyongyang",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2280",
+					"path": [
+						"Asia",
+						"Pyongyang"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/v1/convert",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"06.12.2024 22:30:00\",\r\n    \"tz\": \"America/Argentina/ComodRivadavia\",\r\n    \"target_tz\": \"Asia/Tomsk\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2280/api/v1/convert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2280",
+					"path": [
+						"api",
+						"v1",
+						"convert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/v1/datediff",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_date\": \"06.12.2024 22:30:00\",\r\n    \"first_tz\": \"Asia/Tomsk\",\r\n    \"second_date\": \"10:31pm 2024-06-12\",\r\n    \"second_tz\": \"America/Argentina/ComodRivadavia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2280/api/v1/datediff",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2280",
+					"path": [
+						"api",
+						"v1",
+						"datediff"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
