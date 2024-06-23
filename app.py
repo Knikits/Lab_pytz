@@ -3,13 +3,16 @@ import pytz
 from datetime import datetime
 from wsgiref.simple_server import make_server
 
-def get_time_in_timezone(tz_name='GMT'):
+def get_current_time_response(tz_name):
     try:
-        tz = pytz.timezone(tz_name)
+        timezone = pytz.timezone(tz_name)
+        current_time = datetime.now(timezone).strftime('%Y-%m-%d %H:%M:%S')
+        response_body = f'<html><body><h1>Current time in {tz_name}: {current_time}</h1></body></html>'
+        return '200 OK', 'text/html', response_body
     except pytz.UnknownTimeZoneError:
-        tz = pytz.timezone('GMT')
-    now = datetime.now(tz)
-    return now.strftime('%Y-%m-%d %H:%M:%S %Z%z')
+        available_timezones = '\n'.join(pytz.all_timezones)
+        response_body = f'<html><body><h1>Timezone not found</h1><pre>{available_timezones}</pre></body></html>'
+        return '404 Not Found', 'text/html', response_body
 
 def convert_time(date_str, source_tz_str, target_tz_str):
     source_tz = pytz.timezone(source_tz_str)
@@ -89,6 +92,6 @@ def application(environ, start_response):
     return [response_body.encode('utf-8')]
 
 if __name__ == '__main__':
-    with make_server('', 2280, application) as httpd:
-        print("Обновление данных происходит по порту 2280")
+    with make_server('', 4800, application) as httpd:
+        print("Serving on port 4800...")
         httpd.serve_forever()

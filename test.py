@@ -1,5 +1,6 @@
 import json
 import unittest
+import io
 from app import application
 
 class TestApp(unittest.TestCase):
