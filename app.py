@@ -14,27 +14,50 @@ def get_current_time_response(tz_name):
         response_body = f'<html><body><h1>Timezone not found</h1><pre>{available_timezones}</pre></body></html>'
         return '404 Not Found', 'text/html', response_body
 
-def convert_time(date_str, source_tz_str, target_tz_str):
-    source_tz = pytz.timezone(source_tz_str)
-    target_tz = pytz.timezone(target_tz_str)
-    date = datetime.strptime(date_str, '%m.%d.%Y %H:%M:%S')
-    source_time = source_tz.localize(date)
-    target_time = source_time.astimezone(target_tz)
-    return target_time.strftime('%Y-%m-%d %H:%M:%S %Z%z')
+def convert_timezone(date):
+    try:
+        date_str = data['date']
+        source_tz = data['tz']
+        target_tz = data['target_tz']
+        
+        source_timezone = pytz.timezone(source_tz)
+        target_timezone = pytz.timezone(target_tz)
+        
+        naive_date = datetime.strptime(date_str, '%m.%d.%Y %H:%M:%S')
+        source_date = source_timezone.localize(naive_date)
+        target_date = source_date.astimezone(target_timezone)
+        
+        response = {'converted_date': target_date.strftime('%Y-%m-%d %H:%M:%S')}
+        return '200 OK', 'application/json', json.dumps(response)
+    except Exception as e:
+        return '400 Bad Request', 'application/json', json.dumps({'error': str(e)})
 
-def date_diff(first_date_str, first_tz_str, second_date_str, second_tz_str):
-    first_tz = pytz.timezone(first_tz_str)
-    second_tz = pytz.timezone(second_tz_str)
-    first_date = datetime.strptime(first_date_str, '%m.%d.%Y %H:%M:%S')
-    second_date = datetime.strptime(second_date_str, '%I:%M%p %Y-%m-%d')
-    first_time = first_tz.localize(first_date)
-    second_time = second_tz.localize(second_date)
-    diff = second_time - first_time
-    return diff.total_seconds()
+def date_difference(data):
+    try:
+        first_date_str = data['first_date']
+        first_tz = data['first_tz']
+        second_date_str = data['second_date']
+        second_tz = data['second_tz']
+        
+        first_timezone = pytz.timezone(first_tz)
+        second_timezone = pytz.timezone(second_tz)
+        
+        naive_first_date = datetime.strptime(first_date_str, '%m.%d.%Y %H:%M:%S')
+        naive_second_date = datetime.strptime(second_date_str, '%I:%M%p %Y-%m-%d')
+        
+        first_date = first_timezone.localize(naive_first_date)
+        second_date = second_timezone.localize(naive_second_date)
+        
+        date_diff = (second_date - first_date).total_seconds()
+        
+        response = {'seconds_difference': date_diff}
+        return '200 OK', 'application/json', json.dumps(response)
+    except Exception as e:
+        return '400 Bad Request', 'application/json', json.dumps({'error': str(e)})
 
 def application(environ, start_response):
-    path = environ.get('PATH_INFO', '')
-    method = environ.get('REQUEST_METHOD', 'GET')
+    path = environ.get('PATH_INFO', '').lstrip('/')
+    method = environ.get('REQUEST_METHOD')
 
     if method == 'GET' and path.startswith('/'):
         tz_name = path[1:] or 'GMT'
