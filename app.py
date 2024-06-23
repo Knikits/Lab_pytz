@@ -14,7 +14,7 @@ def get_current_time_response(tz_name):
         response_body = f'<html><body><h1>Timezone not found</h1><pre>{available_timezones}</pre></body></html>'
         return '404 Not Found', 'text/html', response_body
 
-def convert_timezone(date):
+def convert_timezone(data):
     try:
         date_str = data['date']
         source_tz = data['tz']
